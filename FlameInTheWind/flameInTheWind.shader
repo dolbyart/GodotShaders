@@ -28,11 +28,11 @@ float fbm(vec2 uv)
 // -----------------------------------------------
 void fragment()
 {
-    vec2 screenRes = 1.0 / SCREEN_PIXEL_SIZE;
-    vec2 uv = FRAGCOORD.xy / screenRes.xy;
+    vec2 iResolution = 1.0 / SCREEN_PIXEL_SIZE;
+    vec2 uv = FRAGCOORD.xy / iResolution.xy;
     vec2 _uv = uv;
     uv -= vec2(0.5);
-    uv.y /= screenRes.x / screenRes.y;
+    uv.y /= iResolution.x / iResolution.y;
     vec2 centerUV = uv;
     
     // height variation from fbm
@@ -79,7 +79,7 @@ void fragment()
     float centerL = 1.0 - (length(centerUV + vec2(0.0, 0.1)) / haloSize);
     vec4 halo = vec4(.8, .3, .3, 0.0) * 1.0 * fbm(vec2(TIME * 0.035)) * centerL + 0.02;
     vec4 finalCol = mix(halo, COLOR, COLOR.a);
-    // COLOR = finalCol;
+    COLOR = finalCol;
 
     // just a hint of noise
     COLOR *= mix(rand(uv) + rand(uv * .45), 1.0, 0.9);
